@@ -43,7 +43,6 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-
 # ---------------------- Functions ----------------------
 def fetch_poster(movie_id):
     try:
@@ -56,7 +55,6 @@ def fetch_poster(movie_id):
     except Exception as e:
         print(f"Poster fetch error: {e}")
     return "https://via.placeholder.com/500x750?text=No+Image"
-
 
 def recommend(movie):
     movie_index = movies[movies['title'] == movie].index[0]
@@ -71,30 +69,30 @@ def recommend(movie):
         recommended_movies_posters.append(fetch_poster(movie_id))
     return recommended_movies, recommended_movies_posters
 
-
 # ---------------------- Load Data ----------------------
 movies_dict = pickle.load(open('movie_dict.pkl', 'rb'))
 movies = pd.DataFrame(movies_dict)
 
-
 @st.cache_data
 def load_similarity():
     file_id = "1zHNpsLPeGUpZXy4JiD7zqkVmVgXfVmrh"
+    url = f"https://drive.google.com/uc?id={file_id}"
     output_path = "similarity.pkl.gz"
 
     if not os.path.exists(output_path):
-        gdown.download(f"https://drive.google.com/uc?id={file_id}", output_path, quiet=False)
+        gdown.download(url, output_path, quiet=False)
 
-    with gzip.open(output_path, 'rb') as f:
-        return pickle.load(f)
-
+    try:
+        with gzip.open(output_path, 'rb') as f:
+            return pickle.load(f)
+    except gzip.BadGzipFile:
+        raise RuntimeError("Downloaded file is not a valid GZIP file. Check Google Drive link and file format.")
 
 similarity = load_similarity()
 
 # ---------------------- UI ----------------------
 st.markdown("<h1 style='text-align: center; color: #FF4B4B;'>🎬 iRecommend</h1>", unsafe_allow_html=True)
-st.markdown("<h4 style='text-align: center; color: white;'>Find your next favorite movie 🍿</h4>",
-            unsafe_allow_html=True)
+st.markdown("<h4 style='text-align: center; color: white;'>Find your next favorite movie 🍿</h4>", unsafe_allow_html=True)
 st.markdown("---")
 
 selected_movie_name = st.selectbox(
@@ -113,6 +111,6 @@ if st.button('🎯 Show Suggestions'):
                         st.markdown(f"<div class='movie-title'>{names[idx]}</div>", unsafe_allow_html=True)
                         st.image(posters[idx])
         except Exception as e:
-            st.error(f"Something went wrong with recommendations: {e}")
+            st.error(f"Something went wrong: {e}")
 
 st.markdown("<div class='footer'>Made with ❤️ by Jass</div>", unsafe_allow_html=True)
