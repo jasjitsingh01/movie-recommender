@@ -2,8 +2,6 @@ import pickle
 import pandas as pd
 import streamlit as st
 import requests
-import gzip
-import io
 import gdown
 import os
 
@@ -75,18 +73,14 @@ movies = pd.DataFrame(movies_dict)
 
 @st.cache_data
 def load_similarity():
-    file_id = "1zHNpsLPeGUpZXy4JiD7zqkVmVgXfVmrh"
-    url = f"https://drive.google.com/uc?id={file_id}"
-    output_path = "similarity.pkl.gz"
+    file_id = "1zHNpsLPeGUpZXy4JiD7zqkVmVgXfVmrh"  # <-- your real .pkl file ID here
+    output_path = "similarity.pkl"
 
     if not os.path.exists(output_path):
-        gdown.download(url, output_path, quiet=False)
+        gdown.download(f"https://drive.google.com/uc?id={file_id}", output_path, quiet=False)
 
-    try:
-        with gzip.open(output_path, 'rb') as f:
-            return pickle.load(f)
-    except gzip.BadGzipFile:
-        raise RuntimeError("Downloaded file is not a valid GZIP file. Check Google Drive link and file format.")
+    with open(output_path, 'rb') as f:
+        return pickle.load(f)
 
 similarity = load_similarity()
 
