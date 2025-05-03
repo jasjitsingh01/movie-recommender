@@ -102,7 +102,7 @@ if st.button('Show Suggestions'):
         except Exception as e:
             st.error(f"Something went wrong: {e}")
 
-st.markdown(""""
+st.markdown("""
     <style>
         .footer {
             position: fixed;
