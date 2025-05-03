@@ -20,12 +20,7 @@ st.markdown("""
         margin-bottom: 8px;
         color: #ffffff;
     }
-    .footer {
-        text-align: center;
-        color: gray;
-        padding-top: 30px;
-        font-size: 16px;
-    }
+  
     h1, h4, .stSelectbox label, .stButton button {
         color: white !important;
     }
@@ -85,8 +80,8 @@ def load_similarity():
 similarity = load_similarity()
 
 # ---------------------- UI ----------------------
-st.markdown("<h1 style='text-align: center; color: #FF4B4B;'>🎬 iRecommend</h1>", unsafe_allow_html=True)
-st.markdown("<h4 style='text-align: center; color: white;'>Find your next favorite movie 🍿</h4>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align: center; color: #FF4B4B;'>iRecommend</h1>", unsafe_allow_html=True)
+st.markdown("<h4 style='text-align: center; color: white;'>Find your next favorite movie</h4>", unsafe_allow_html=True)
 st.markdown("---")
 
 selected_movie_name = st.selectbox(
@@ -94,7 +89,7 @@ selected_movie_name = st.selectbox(
     movies['title'].values
 )
 
-if st.button('🎯 Show Suggestions'):
+if st.button('Show Suggestions'):
     with st.spinner('Finding perfect movies for you...'):
         try:
             names, posters = recommend(selected_movie_name)
@@ -107,4 +102,23 @@ if st.button('🎯 Show Suggestions'):
         except Exception as e:
             st.error(f"Something went wrong: {e}")
 
-st.markdown("<div class='footer'>Made with ❤️ by Jass</div>", unsafe_allow_html=True)
+st.markdown(""""
+    <style>
+        .footer {
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            background-color: #f0f0f0;
+            color: #555;
+            text-align: center;
+            padding: 10px;
+            font-size: 14px;
+            font-family: 'Segoe UI', sans-serif;
+            border-top: 1px solid #ddd;
+        }
+    </style>
+    <div class="footer">
+        Made with care by <strong>Jass</strong> © 2025. All rights reserved.
+    </div>
+""", unsafe_allow_html=True)
